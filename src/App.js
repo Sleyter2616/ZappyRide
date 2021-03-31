@@ -4,6 +4,7 @@ import {Container} from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import InputScreen from './Screens/InputScreen'
+import Home from './Screens/InputScreen'
 
 const App = () => {
 	return (
@@ -11,6 +12,7 @@ const App = () => {
 			<Header />
 			<main className='py 3'>
 				<Container>
+					<Route path='/' exact component={Home} />
 					<Route path='/input' component={InputScreen} />
 				</Container>
 			</main>
