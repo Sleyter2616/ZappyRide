@@ -3,13 +3,16 @@ import React from 'react'
 import {Container} from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import InputScreen from './Screens/InputScreen'
 
 const App = () => {
 	return (
 		<BrowserRouter>
 			<Header />
 			<main className='py 3'>
-				<Container>MAIN</Container>
+				<Container>
+					<Route path='/input' component={InputScreen} />
+				</Container>
 			</main>
 			<Footer />
 		</BrowserRouter>
