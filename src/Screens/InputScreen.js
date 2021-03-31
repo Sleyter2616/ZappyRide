@@ -31,7 +31,6 @@ const InputScreen = () => {
 		const timeErr = {}
 		const milesPerYearErr = {}
 		let isValid = true
-		console.log(startTime, endTime)
 		if (startTime === endTime) {
 			timeErr.timesMustDiffer =
 				'The start time and the end time must differ'
