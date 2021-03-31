@@ -24,6 +24,10 @@ const InputScreen = () => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const isValid = formValidation()
+		if (isValid) {
+			//Send data to calculate
+			//Push to results page
+		}
 	}
 	const formValidation = () => {
 		const timeErr = {}
