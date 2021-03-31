@@ -1,13 +1,18 @@
 import React, {useState} from 'react'
 import {Form, Button} from 'react-bootstrap'
 import TimePicker from 'react-bootstrap-time-picker'
+import Message from '../components/Message'
 
 const InputScreen = () => {
 	//All neccesary UI states from user inputs
 	const [typeRate, setTypeRate] = useState('flat')
-	const [milesPerYear, setMilesPerYear] = useState(0)
-	const [startTime, setStartTime] = useState(0)
-	const [endTime, setEndTime] = useState(0)
+	const [milesPerYear, setMilesPerYear] = useState(1000)
+	const [startTime, setStartTime] = useState('00:00')
+	const [endTime, setEndTime] = useState('06:00')
+
+	// Error handling for the form validation
+	const [milesPerYearErr, setMilesPerYearErr] = useState({})
+	const [timeErr, setTimeErr] = useState({})
 
 	//All Handlers
 	const handleStartTimeChange = (time) => {
@@ -20,6 +25,38 @@ const InputScreen = () => {
 	}
 	const onSubmit = (e) => {
 		e.preventDefault()
+		const isValid = formValidation()
+	}
+	const formValidation = () => {
+		const timeErr = {}
+		const milesPerYearErr = {}
+		let isValid = true
+		console.log(startTime, endTime)
+		if (startTime === endTime) {
+			timeErr.timesMustDiffer =
+				'The start time and the end time must differ'
+			isValid = false
+		}
+		//Regex pattern for numbers
+		const numPattern = /^\d+$/
+		if (!numPattern.test(milesPerYear)) {
+			milesPerYearErr.mustBeNum = 'Miles per Year must be a number'
+			isValid = false
+		}
+		if (milesPerYear < 1000) {
+			milesPerYearErr.notInRange =
+				'The miles per year must be at least 1,000'
+			isValid = false
+		}
+		if (milesPerYear > 200000) {
+			milesPerYearErr.notInRange =
+				'The miles per year must be maximum 200,000 Miles'
+			isValid = false
+		}
+
+		setMilesPerYearErr(milesPerYearErr)
+		setTimeErr(timeErr)
+		return isValid
 	}
 	return (
 		<div>
@@ -53,6 +90,14 @@ const InputScreen = () => {
 						onChange={(e) => setMilesPerYear(e.target.value)}
 					></Form.Control>
 				</Form.Group>
+				{Object.keys(milesPerYearErr).map((key) => {
+					return (
+						<Message variant='danger' key={key}>
+							{milesPerYearErr[key]}
+						</Message>
+					)
+				})}
+
 				<Form.Group controlId='time'>
 					<Form.Label>
 						From what times do you plan on charging your electric
@@ -70,6 +115,14 @@ const InputScreen = () => {
 						onChange={(time) => handleEndTimeChange(time)}
 					/>
 				</Form.Group>
+				{Object.keys(timeErr).map((key) => {
+					return (
+						<Message key={key} variant='danger'>
+							{timeErr[key]}
+						</Message>
+					)
+				})}
+
 				<Button variant='primary' type='submit'>
 					Submit
 				</Button>
