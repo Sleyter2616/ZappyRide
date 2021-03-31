@@ -4,7 +4,7 @@ import {Container} from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import InputScreen from './Screens/InputScreen'
-import Home from './Screens/InputScreen'
+import Home from './components/Home'
 
 const App = () => {
 	return (
