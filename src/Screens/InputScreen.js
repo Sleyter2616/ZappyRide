@@ -7,8 +7,8 @@ const InputScreen = () => {
 	//All neccesary UI states from user inputs
 	const [typeRate, setTypeRate] = useState('flat')
 	const [milesPerYear, setMilesPerYear] = useState(1000)
-	const [startTime, setStartTime] = useState('00:00')
-	const [endTime, setEndTime] = useState('06:00')
+	const [startTime, setStartTime] = useState(0)
+	const [endTime, setEndTime] = useState(0)
 
 	// Error handling for the form validation
 	const [milesPerYearErr, setMilesPerYearErr] = useState({})
@@ -16,11 +16,9 @@ const InputScreen = () => {
 
 	//All Handlers
 	const handleStartTimeChange = (time) => {
-		console.log(time) // <- prints "3600" if "01:00" is picked
 		setStartTime(time)
 	}
 	const handleEndTimeChange = (time) => {
-		console.log(time) // <- prints "3600" if "01:00" is picked
 		setEndTime(time)
 	}
 	const onSubmit = (e) => {
