@@ -23,6 +23,12 @@ const Header = () => {
 									Input Field
 								</Nav.Link>
 							</LinkContainer>
+							<LinkContainer to='/excel'>
+								<Nav.Link>
+									<i className='fas fa-info-circle' />
+									Data
+								</Nav.Link>
+							</LinkContainer>
 						</Nav>
 					</Navbar.Collapse>
 				</Container>
