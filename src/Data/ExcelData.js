@@ -46,12 +46,25 @@ const ExcelData = () => {
 					}
 					const loadRate = 0.15,
 						miles = 5000
+
 					const flatDifference = flatHourlyRate(
 						loadRate,
 						loadProfile,
 						miles
 					)
-					console.log(flatDifference)
+					console.log('flat difference', flatDifference)
+					const noonTOURate = 0.08,
+						normalTOURate = 0.2,
+						time = 'afternoon'
+					const timeOfUseDifference = timeOfUseRate(
+						noonTOURate,
+						normalTOURate,
+						loadProfile,
+						noonToSixProfile,
+						miles,
+						time
+					)
+					console.log('time of use difference', timeOfUseDifference)
 
 					const dvCSV = document.getElementById('dvCSV')
 					dvCSV.innerHTML = ''

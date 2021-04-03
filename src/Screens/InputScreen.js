@@ -7,20 +7,11 @@ const InputScreen = () => {
 	//All neccesary UI states from user inputs
 	const [typeRate, setTypeRate] = useState('flat')
 	const [milesPerYear, setMilesPerYear] = useState(1000)
-	const [startTime, setStartTime] = useState(0)
-	const [endTime, setEndTime] = useState(0)
+	const [time, setTime] = useState('morning')
 
 	// Error handling for the form validation
 	const [milesPerYearErr, setMilesPerYearErr] = useState({})
-	const [timeErr, setTimeErr] = useState({})
 
-	//All Handlers
-	const handleStartTimeChange = (time) => {
-		setStartTime(time)
-	}
-	const handleEndTimeChange = (time) => {
-		setEndTime(time)
-	}
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const isValid = formValidation()
@@ -30,15 +21,9 @@ const InputScreen = () => {
 		}
 	}
 	const formValidation = () => {
-		const timeErr = {}
 		const milesPerYearErr = {}
 		let isValid = true
-		if (startTime === endTime) {
-			timeErr.timesMustDiffer =
-				'The start time and the end time must differ'
-			isValid = false
-		}
-		//Regex pattern for numbers
+
 		const numPattern = /^\d+$/
 		if (!numPattern.test(milesPerYear)) {
 			milesPerYearErr.mustBeNum = 'Miles per Year must be a number'
@@ -56,7 +41,7 @@ const InputScreen = () => {
 		}
 
 		setMilesPerYearErr(milesPerYearErr)
-		setTimeErr(timeErr)
+
 		return isValid
 	}
 	return (
@@ -99,7 +84,33 @@ const InputScreen = () => {
 					)
 				})}
 
-				<Form.Group controlId='time'>
+				<Form.Group controlId='timeSelect'>
+					<Form.Label>
+						What time do you plan on charging your Electric Vehicle?
+					</Form.Label>
+					<Form.Control
+						as='select'
+						value={time}
+						onChange={(e) => setTime(e.target.value)}
+					>
+						<option value='midnight'>12:00AM - 6:00AM</option>
+						<option value='morning'>6:00AM - 12:00PM</option>
+						<option value='afternoon'> 12:00PM - 6:00PM</option>
+						<option value='evening'>6:00PM - 12:00AM</option>
+					</Form.Control>
+				</Form.Group>
+
+				<Button variant='primary' type='submit'>
+					Submit
+				</Button>
+			</Form>
+		</div>
+	)
+}
+
+export default InputScreen
+{
+	/* <Form.Group controlId='time'>
 					<Form.Label>
 						From what times do you plan on charging your electric
 						vehicle?
@@ -115,21 +126,5 @@ const InputScreen = () => {
 						value={endTime}
 						onChange={(time) => handleEndTimeChange(time)}
 					/>
-				</Form.Group>
-				{Object.keys(timeErr).map((key) => {
-					return (
-						<Message key={key} variant='danger'>
-							{timeErr[key]}
-						</Message>
-					)
-				})}
-
-				<Button variant='primary' type='submit'>
-					Submit
-				</Button>
-			</Form>
-		</div>
-	)
+				</Form.Group> */
 }
-
-export default InputScreen
