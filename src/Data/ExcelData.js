@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import * as XLSX from 'xlsx'
+import {flatHourlyRate, timeOfUseRate} from './calculations'
 
 const ExcelData = () => {
 	const [excelData, setExcelData] = useState([])
@@ -21,7 +21,9 @@ const ExcelData = () => {
 
 					//SKIP LAST NEW LINE, AND SKIP FIRST LINE
 					//
-					let num = 0
+					let loadProfile = 0
+					let noonToSixProfile = 0
+					let hourTime = 1
 					for (let i = 1; i < rows.length - 1; i++) {
 						const row = table.insertRow(-1)
 						const cells = rows[i].split(',')
@@ -30,12 +32,27 @@ const ExcelData = () => {
 
 						for (let j = 1; j < cells.length; j += row.length) {
 							const cell = row.insertCell(-1)
-
+							if (hourTime >= 12 && hourTime < 18) {
+								noonToSixProfile += parseFloat(cells[j])
+							}
 							cell.innerHTML = cells[j]
-							num += parseFloat(cells[j])
+
+							loadProfile += parseFloat(cells[j])
+							hourTime++
+							if (hourTime == 24) {
+								hourTime = 0
+							}
 						}
 					}
-					console.log(num / rows.length)
+					const loadRate = 0.15,
+						miles = 5000
+					const flatDifference = flatHourlyRate(
+						loadRate,
+						loadProfile,
+						miles
+					)
+					console.log(flatDifference)
+
 					const dvCSV = document.getElementById('dvCSV')
 					dvCSV.innerHTML = ''
 					dvCSV.appendChild(table)

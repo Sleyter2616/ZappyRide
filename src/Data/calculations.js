@@ -1,31 +1,13 @@
-export const flatHourlyRate = (
-	loadRate,
-	totalTimeInHours,
-	usagePerHour,
-	miles
-) => {
+export const flatHourlyRate = (loadRate, loadProfile, miles) => {
 	const evConsumption = 0.3
-	const homeLoadProfile = loadRate * usagePerHour * totalTimeInHours
-	const evLoadProfile = loadRate * miles * evConsumption
-	const newBill = homeLoadProfile + evLoadProfile
-	const difference = newBill - homeLoadProfile
+	const homeLoadPrice = loadRate * loadProfile
+	const evLoadPrice = loadRate * miles * evConsumption
+	const newBill = homeLoadPrice + evLoadPrice
+	const difference = newBill - homeLoadPrice
 	return difference
 }
 
 export const timeOfUseRate = (
-	firstLoadRatePerHour,
-	secondLoadRatePerHour,
-	firstTotalTimeInHours,
-	secondTotalTimeInHours,
-	firstUsagePerHour,
-	secondUsagePerHour
-) => {
-	const firstRateBill =
-		firstLoadRatePerHour * firstUsagePerHour * firstTotalTimeInHours
-
-	const secondRateBill =
-		secondLoadRatePerHour * SecondUsagePerHour * SecondTotalTimeInHours
-
-	const B1 = firstRateBill + secondLoadRatePerHour
-	return B1
-}
+	noonToSixLoadRatePerHour,
+	normalLoadRatePerHour
+) => {}
