@@ -7,8 +7,13 @@ import {flatHourlyRate, timeOfUseRate} from '../Data/calculations'
 const InputScreen = () => {
 	//All neccesary UI states from user inputs
 	const [typeRate, setTypeRate] = useState('flat')
-	const [milesPerYear, setMilesPerYear] = useState(1000)
-	const [time, setTime] = useState('morning')
+	const [milesPerYear, setMilesPerYear] = useState(5000)
+	const [time, setTime] = useState('afternoon')
+	const [flatLoadRate, setFlatLoadRate] = useState(0.15)
+	const [afternoonRate, setAfternoonRate] = useState(0.2)
+	const [otherTOURate, setOtherTOURate] = useState(0.08)
+	const [loadProfile, setLoadProfile] = useState(0)
+	const [afternoonProfile, setAfternoonProfile] = useState(0)
 
 	// Error handling for the form validation
 	const [milesPerYearErr, setMilesPerYearErr] = useState({})
@@ -16,6 +21,7 @@ const InputScreen = () => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const isValid = formValidation()
+
 		if (isValid) {
 			//Send data to calculate
 			//Push to results page
@@ -64,9 +70,9 @@ const InputScreen = () => {
 					//to insert the rows
 
 					//SKIP LAST NEW LINE, AND SKIP FIRST LINE
-					//
-					let loadProfile = 0
-					let noonToSixProfile = 0
+					//Temporary values for setting other vals
+					let currProfile = 0
+					let currAfternoonProfile = 0
 					let hourTime = 1
 					for (let i = 1; i < rows.length - 1; i++) {
 						const row = table.insertRow(-1)
@@ -77,35 +83,32 @@ const InputScreen = () => {
 						for (let j = 1; j < cells.length; j += row.length) {
 							const cell = row.insertCell(-1)
 							if (hourTime >= 12 && hourTime < 18) {
-								noonToSixProfile += parseFloat(cells[j])
+								currAfternoonProfile += parseFloat(cells[j])
 							}
 							cell.innerHTML = cells[j]
 
-							loadProfile += parseFloat(cells[j])
+							currProfile += parseFloat(cells[j])
 							hourTime++
 							if (hourTime == 24) {
 								hourTime = 0
 							}
 						}
 					}
-					const loadRate = 0.15,
-						miles = 5000
-
+					setLoadProfile(currProfile)
+					setAfternoonProfile(currAfternoonProfile)
 					const flatDifference = flatHourlyRate(
-						loadRate,
+						flatLoadRate,
 						loadProfile,
-						miles
+						milesPerYear
 					)
 					console.log('flat difference', flatDifference)
-					const noonTOURate = 0.08,
-						normalTOURate = 0.2,
-						time = 'afternoon'
+
 					const timeOfUseDifference = timeOfUseRate(
-						noonTOURate,
-						normalTOURate,
+						afternoonRate,
+						otherTOURate,
 						loadProfile,
-						noonToSixProfile,
-						miles,
+						afternoonProfile,
+						milesPerYear,
 						time
 					)
 					console.log('time of use difference', timeOfUseDifference)
