@@ -83,7 +83,7 @@ const ExcelData = () => {
 		<div>
 			<input
 				type='file'
-				accept='.xls, .xlsx, .csv'
+				accept='.csv'
 				id='fileUpload'
 				onChange={(e) => {
 					const file = e.target.files[0]

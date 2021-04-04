@@ -1,7 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Form, Button} from 'react-bootstrap'
 import TimePicker from 'react-bootstrap-time-picker'
 import Message from '../components/Message'
+import {flatHourlyRate, timeOfUseRate} from '../Data/calculations'
 
 const InputScreen = () => {
 	//All neccesary UI states from user inputs
@@ -44,6 +45,84 @@ const InputScreen = () => {
 
 		return isValid
 	}
+
+	// Getting data from CSV file
+	const readExcel = () => {
+		//Uploading csv file and testing to make sure it has proper characters
+		const fileUpload = document.getElementById('fileUpload')
+		const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/
+		if (regex.test(fileUpload.value.toLowerCase())) {
+			if (typeof FileReader != 'undefined') {
+				const reader = new FileReader()
+
+				reader.onload = function (e) {
+					//create Table and Rows
+					const table = document.createElement('table')
+					const rows = e.target.result.split('\n')
+					console.log(rows.length)
+					//Looping over every row after the first (to skip the names)
+					//to insert the rows
+
+					//SKIP LAST NEW LINE, AND SKIP FIRST LINE
+					//
+					let loadProfile = 0
+					let noonToSixProfile = 0
+					let hourTime = 1
+					for (let i = 1; i < rows.length - 1; i++) {
+						const row = table.insertRow(-1)
+						const cells = rows[i].split(',')
+						//starting on the second item and looping over
+						//Each second iteml
+
+						for (let j = 1; j < cells.length; j += row.length) {
+							const cell = row.insertCell(-1)
+							if (hourTime >= 12 && hourTime < 18) {
+								noonToSixProfile += parseFloat(cells[j])
+							}
+							cell.innerHTML = cells[j]
+
+							loadProfile += parseFloat(cells[j])
+							hourTime++
+							if (hourTime == 24) {
+								hourTime = 0
+							}
+						}
+					}
+					const loadRate = 0.15,
+						miles = 5000
+
+					const flatDifference = flatHourlyRate(
+						loadRate,
+						loadProfile,
+						miles
+					)
+					console.log('flat difference', flatDifference)
+					const noonTOURate = 0.08,
+						normalTOURate = 0.2,
+						time = 'afternoon'
+					const timeOfUseDifference = timeOfUseRate(
+						noonTOURate,
+						normalTOURate,
+						loadProfile,
+						noonToSixProfile,
+						miles,
+						time
+					)
+					console.log('time of use difference', timeOfUseDifference)
+
+					// const dvCSV = document.getElementById('dvCSV')
+					// dvCSV.innerHTML = ''
+					// dvCSV.appendChild(table)
+				}
+				reader.readAsText(fileUpload.files[0])
+			} else {
+				alert('This browser does not support HTML5.')
+			}
+		} else {
+			alert('Please upload a valid CSV file.')
+		}
+	}
+
 	return (
 		<div>
 			<Form className='py-4' onSubmit={onSubmit}>
@@ -99,6 +178,16 @@ const InputScreen = () => {
 						<option value='evening'>6:00PM - 12:00AM</option>
 					</Form.Control>
 				</Form.Group>
+				<Form.Group>
+					<Form.File
+						label='Please Upload CSV file with data'
+						accept='.csv'
+						id='fileUpload'
+						onChange={() => {
+							readExcel()
+						}}
+					/>
+				</Form.Group>
 
 				<Button variant='primary' type='submit'>
 					Submit
@@ -109,22 +198,3 @@ const InputScreen = () => {
 }
 
 export default InputScreen
-{
-	/* <Form.Group controlId='time'>
-					<Form.Label>
-						From what times do you plan on charging your electric
-						vehicle?
-					</Form.Label>
-					<br />
-					Start Time:
-					<TimePicker
-						value={startTime}
-						onChange={(time) => handleStartTimeChange(time)}
-					/>
-					End Time:
-					<TimePicker
-						value={endTime}
-						onChange={(time) => handleEndTimeChange(time)}
-					/>
-				</Form.Group> */
-}
