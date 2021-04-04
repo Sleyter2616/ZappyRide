@@ -17,6 +17,7 @@ const InputScreen = () => {
 
 	// Error handling for the form validation
 	const [milesPerYearErr, setMilesPerYearErr] = useState({})
+	const [loadProfileErr, setLoadProfileErr] = useState({})
 
 	const onSubmit = (e) => {
 		e.preventDefault()
@@ -29,6 +30,7 @@ const InputScreen = () => {
 	}
 	const formValidation = () => {
 		const milesPerYearErr = {}
+		const loadProfileErr = {}
 		let isValid = true
 
 		const numPattern = /^\d+$/
@@ -46,8 +48,14 @@ const InputScreen = () => {
 				'The miles per year must be maximum 200,000 Miles'
 			isValid = false
 		}
+		if (loadProfile === 0) {
+			loadProfileErr.notSet =
+				'Please upload a proper CSV file with an loadProfile on the Second column (data Starting Row 2) '
+			isValid = false
+		}
 
 		setMilesPerYearErr(milesPerYearErr)
+		setLoadProfileErr(loadProfileErr)
 
 		return isValid
 	}
@@ -112,10 +120,6 @@ const InputScreen = () => {
 						time
 					)
 					console.log('time of use difference', timeOfUseDifference)
-
-					// const dvCSV = document.getElementById('dvCSV')
-					// dvCSV.innerHTML = ''
-					// dvCSV.appendChild(table)
 				}
 				reader.readAsText(fileUpload.files[0])
 			} else {
@@ -202,6 +206,13 @@ const InputScreen = () => {
 					BUFFALO NY CSV FILE
 				</a>
 				<br />
+				{Object.keys(loadProfileErr).map((key) => {
+					return (
+						<Message variant='danger' key={key}>
+							{loadProfileErr[key]}
+						</Message>
+					)
+				})}
 				<Button variant='primary' type='submit'>
 					Submit
 				</Button>
