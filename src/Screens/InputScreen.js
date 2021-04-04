@@ -15,6 +15,7 @@ const InputScreen = () => {
 	const [afternoonProfile, setAfternoonProfile] = useState(0)
 	const [timeOfUseDifference, setTimeOfUseDifference] = useState(0)
 	const [flatDifference, setFlatDifference] = useState(0)
+	const [resultObject, setResultObject] = useState({})
 
 	// Error handling for the form validation
 	const [milesPerYearErr, setMilesPerYearErr] = useState({})
@@ -44,7 +45,32 @@ const InputScreen = () => {
 			setFlatDifference(flatDiff)
 			setTimeOfUseDifference(touDiff)
 
+			const result = {}
 			//Push to results page
+			if (flatDiff < touDiff) {
+				if (typeRate === 'flat') {
+					result.output = `You should keep the flat rate. You will be paying an  extra (Flat Rate) $${flatDiff} vs (Time Rate) $${touDiff} a year. Total savings by keeping the Flat rate over the time rate is ${
+						touDiff - flatDiff
+					} `
+					if (typeRate === 'time') {
+						result.output = `You should switch to a flat rate. You will be paying an extra (Flat Rate) $${flatDiff} vs (Time Rate) $${touDiff} a year. Total savings by switching to the flat rate over the time rate is ${
+							touDiff - flatDiff
+						}`
+					}
+					if (touDiff < flatDiff) {
+						if (typeRate === 'flat') {
+							result.output = `You should switch to the Time rate. You will be paying an extra (Flat Rate) $${flatDiff} vs (Time Rate) $${touDiff} a year. Total savings switching to the time rate over the flat rate is ${
+								flatDiff - touDiff
+							} `
+							if (typeRate === 'time') {
+								result.output = `You should keep the time rate. You will be paying an extra (Flat Rate) $${flatDiff} vs (Time Rate) $${touDiff} a year. Total savings by keeping the time rate over the flat rate is ${
+									flatDiff - touDiff
+								} `
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	const formValidation = () => {
