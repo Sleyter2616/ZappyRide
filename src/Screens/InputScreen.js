@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import {Form, Button} from 'react-bootstrap'
-import TimePicker from 'react-bootstrap-time-picker'
 import Message from '../components/Message'
 import {flatHourlyRate, timeOfUseRate} from '../Data/calculations'
 
@@ -15,7 +14,7 @@ const InputScreen = () => {
 	const [loadProfile, setLoadProfile] = useState(0)
 	const [afternoonProfile, setAfternoonProfile] = useState(0)
 	const [timeOfUseDifference, setTimeOfUseDifference] = useState(0)
-	const [flatDifference, setFlaDifference] = useState(0)
+	const [flatDifference, setFlatDifference] = useState(0)
 
 	// Error handling for the form validation
 	const [milesPerYearErr, setMilesPerYearErr] = useState({})
@@ -27,6 +26,24 @@ const InputScreen = () => {
 
 		if (isValid) {
 			//Send data to calculate
+			const flatDiff = flatHourlyRate(
+				flatLoadRate,
+				loadProfile,
+				milesPerYear
+			)
+
+			const touDiff = timeOfUseRate(
+				afternoonRate,
+				otherTOURate,
+				loadProfile,
+				afternoonProfile,
+				milesPerYear,
+				time
+			)
+
+			setFlatDifference(flatDiff)
+			setTimeOfUseDifference(touDiff)
+
 			//Push to results page
 		}
 	}
@@ -99,36 +116,13 @@ const InputScreen = () => {
 
 							currProfile += parseFloat(cells[j])
 							hourTime++
-							if (hourTime == 24) {
+							if (hourTime === 24) {
 								hourTime = 0
 							}
 						}
 					}
 					setLoadProfile(currProfile)
 					setAfternoonProfile(currAfternoonProfile)
-					const flatDiff = flatHourlyRate(
-						flatLoadRate,
-						loadProfile,
-						milesPerYear
-					)
-					setFlaDifference(flatDiff)
-
-					const touDiff = timeOfUseRate(
-						afternoonRate,
-						otherTOURate,
-						loadProfile,
-						afternoonProfile,
-						milesPerYear,
-						time
-					)
-					setTimeOfUseDifference(touDiff)
-					setTimeout(() => {
-						console.log('flat difference', flatDifference)
-						console.log(
-							'time of use difference',
-							timeOfUseDifference
-						)
-					}, 3000)
 				}
 				reader.readAsText(fileUpload.files[0])
 			} else {
@@ -210,6 +204,7 @@ const InputScreen = () => {
 				</Message>
 				<a
 					target='_blank'
+					rel='noreferrer'
 					href='https://openei.org/datasets/files/961/pub/EPLUS_TMY2_RESIDENTIAL_BASE/USA_NY_Buffalo.725280_TMY2.csv'
 				>
 					BUFFALO NY CSV FILE
