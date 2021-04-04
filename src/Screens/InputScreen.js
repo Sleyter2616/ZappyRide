@@ -8,12 +8,14 @@ const InputScreen = () => {
 	//All neccesary UI states from user inputs
 	const [typeRate, setTypeRate] = useState('flat')
 	const [milesPerYear, setMilesPerYear] = useState(5000)
-	const [time, setTime] = useState('afternoon')
+	const [time, setTime] = useState('morning')
 	const [flatLoadRate, setFlatLoadRate] = useState(0.15)
 	const [afternoonRate, setAfternoonRate] = useState(0.2)
 	const [otherTOURate, setOtherTOURate] = useState(0.08)
 	const [loadProfile, setLoadProfile] = useState(0)
 	const [afternoonProfile, setAfternoonProfile] = useState(0)
+	const [timeOfUseDifference, setTimeOfUseDifference] = useState(0)
+	const [flatDifference, setFlaDifference] = useState(0)
 
 	// Error handling for the form validation
 	const [milesPerYearErr, setMilesPerYearErr] = useState({})
@@ -104,14 +106,14 @@ const InputScreen = () => {
 					}
 					setLoadProfile(currProfile)
 					setAfternoonProfile(currAfternoonProfile)
-					const flatDifference = flatHourlyRate(
+					const flatDiff = flatHourlyRate(
 						flatLoadRate,
 						loadProfile,
 						milesPerYear
 					)
-					console.log('flat difference', flatDifference)
+					setFlaDifference(flatDiff)
 
-					const timeOfUseDifference = timeOfUseRate(
+					const touDiff = timeOfUseRate(
 						afternoonRate,
 						otherTOURate,
 						loadProfile,
@@ -119,7 +121,14 @@ const InputScreen = () => {
 						milesPerYear,
 						time
 					)
-					console.log('time of use difference', timeOfUseDifference)
+					setTimeOfUseDifference(touDiff)
+					setTimeout(() => {
+						console.log('flat difference', flatDifference)
+						console.log(
+							'time of use difference',
+							timeOfUseDifference
+						)
+					}, 3000)
 				}
 				reader.readAsText(fileUpload.files[0])
 			} else {
