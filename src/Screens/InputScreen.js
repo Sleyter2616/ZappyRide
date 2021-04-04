@@ -189,6 +189,16 @@ const InputScreen = () => {
 					/>
 				</Form.Group>
 
+				<Message variant='info'>
+					If needed download CSV file with data below
+				</Message>
+				<a
+					target='_blank'
+					href='https://openei.org/datasets/files/961/pub/EPLUS_TMY2_RESIDENTIAL_BASE/USA_NY_Buffalo.725280_TMY2.csv'
+				>
+					BUFFALO NY CSV FILE
+				</a>
+				<br />
 				<Button variant='primary' type='submit'>
 					Submit
 				</Button>
