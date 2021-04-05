@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {Form, Button} from 'react-bootstrap'
 import Message from '../components/Message'
 import {flatHourlyRate, timeOfUseRate} from '../Data/calculations'
@@ -14,8 +14,7 @@ const InputScreen = ({history}) => {
 	const [otherTOURate, setOtherTOURate] = useState(0.08)
 	const [loadProfile, setLoadProfile] = useState(0)
 	const [afternoonProfile, setAfternoonProfile] = useState(0)
-	const [timeOfUseDifference, setTimeOfUseDifference] = useState(0)
-	const [flatDifference, setFlatDifference] = useState(0)
+
 	const [resultObject, setResultObject] = useState({})
 
 	// Error handling for the form validation
@@ -42,9 +41,6 @@ const InputScreen = ({history}) => {
 				milesPerYear,
 				time
 			)
-
-			setFlatDifference(flatDiff)
-			setTimeOfUseDifference(touDiff)
 
 			const result = {}
 			//Push to results page
@@ -88,7 +84,6 @@ const InputScreen = ({history}) => {
 			result.flat = flatDiff
 			result.time = touDiff
 			setResultObject(result)
-			console.log(resultObject)
 		}
 	}
 	const formValidation = () => {
@@ -136,7 +131,7 @@ const InputScreen = ({history}) => {
 					//create Table and Rows
 					const table = document.createElement('table')
 					const rows = e.target.result.split('\n')
-					console.log(rows.length)
+
 					//Looping over every row after the first (to skip the names)
 					//to insert the rows
 
@@ -258,7 +253,7 @@ const InputScreen = ({history}) => {
 				</Form.Group>
 
 				<Message variant='info'>
-					If needed download CSV file with data below
+					If needed download CSV file with Link below
 				</Message>
 				<a
 					target='_blank'

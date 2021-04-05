@@ -3,13 +3,9 @@ import {Figure, ProgressBar} from 'react-bootstrap'
 
 const Result = ({text, choice, answer, flat, time}) => {
 	const textStyle = {color: 'black'}
-	const imgStyle = {
-		opacity: '.9',
-		backgroundColor: '#004ff9',
-	}
 	const timePercent = (flat / (flat + time)) * 100
 	const flatPercent = (time / (flat + time)) * 100
-	console.log(flatPercent, timePercent)
+
 	return (
 		<Figure>
 			<h3>You choose, the {choice} rate</h3>
