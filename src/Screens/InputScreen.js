@@ -49,39 +49,44 @@ const InputScreen = ({history}) => {
 			const result = {}
 			//Push to results page
 			if (flatDiff < touDiff) {
+				result.answer = 'flat'
 				if (typeRate === 'flat') {
 					result.choice = 'flat'
-					result.text = `You should keep the flat rate. You will be paying an  extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by keeping the Flat rate over the time rate is ${
+					result.text = `You should keep the flat rate. You will be paying an  extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by keeping the Flat rate over the time rate is $${
 						touDiff - flatDiff
 					} `
 				}
 				if (typeRate === 'time') {
 					result.choice = 'time'
-					result.text = `You should switch to a flat rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by switching to the flat rate over the time rate is ${
+					result.text = `You should switch to a flat rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by switching to the flat rate over the time rate is $${
 						touDiff - flatDiff
 					}`
 				}
 			}
 			if (touDiff < flatDiff) {
+				result.answer = 'time'
 				if (typeRate === 'flat') {
 					result.choice = 'flat'
-					result.text = `You should switch to the Time rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings switching to the time rate over the flat rate is ${
+					result.text = `You should switch to the Time rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings switching to the time rate over the flat rate is $${
 						flatDiff - touDiff
 					} `
 				}
 				if (typeRate === 'time') {
 					result.choice = 'time'
-					result.text = `You should keep the time rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by keeping the time rate over the flat rate is ${
+					result.text = `You should keep the time rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by keeping the time rate over the flat rate is $${
 						flatDiff - touDiff
 					} `
 				}
 			}
 			if (touDiff === flatDiff) {
+				result.answer = 'both'
 				result.text = ` Both rates work the same! You will be paying ${flatDiff} a year for either Rate. `
 				typeRate === 'time'
 					? (result.choice = 'time')
 					: (result.choice = 'flat')
 			}
+			result.flat = flatDiff
+			result.time = touDiff
 			setResultObject(result)
 			console.log(resultObject)
 		}
@@ -177,7 +182,13 @@ const InputScreen = ({history}) => {
 	return (
 		<div>
 			{resultObject.choice ? (
-				<Result text={resultObject.text} choice={resultObject.choice} />
+				<Result
+					text={resultObject.text}
+					choice={resultObject.choice}
+					answer={resultObject.answer}
+					flat={resultObject.flat}
+					time={resultObject.time}
+				/>
 			) : null}
 			<Form className='py-4' onSubmit={onSubmit}>
 				<Form.Group controlId='typeOfRate'>

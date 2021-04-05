@@ -1,29 +1,28 @@
 import React from 'react'
-import {Carousel} from 'react-bootstrap'
+import {Figure, ProgressBar} from 'react-bootstrap'
 
-const Result = ({text, choice}) => {
-	const textStyle = {color: 'white'}
+const Result = ({text, choice, answer, flat, time}) => {
+	const textStyle = {color: 'black'}
 	const imgStyle = {
-		opacity: '.7',
+		opacity: '.9',
+		backgroundColor: '#004ff9',
 	}
+	const timePercent = (flat / (flat + time)) * 100
+	const flatPercent = (time / (flat + time)) * 100
+	console.log(flatPercent, timePercent)
 	return (
-		<Carousel>
-			<Carousel.Item>
-				<img
-					style={imgStyle}
-					className='d-block w-100'
-					src='https://image.freepik.com/free-vector/realistic-blue-yellow-lightning-bolts_107791-3244.jpg'
-					alt={text}
-				/>
-				<Carousel.Caption>
-					<h3 style={textStyle}>{text}</h3>
-					<p style={textStyle}>
-						Nulla vitae elit libero, a pharetra augue mollis
-						interdum.
-					</p>
-				</Carousel.Caption>
-			</Carousel.Item>
-		</Carousel>
+		<Figure>
+			<h3>You choose, the {choice} rate</h3>
+			<h4>The best option for you is the {answer} rate</h4>
+			<Figure.Caption style={textStyle}>{text}</Figure.Caption>
+			<br />
+			<Figure.Caption style={textStyle}>Flat Rate Savings</Figure.Caption>
+			<ProgressBar striped variant='info' now={flatPercent} key={1} />
+			<Figure.Caption style={textStyle}>
+				Time of Use Rate Savings
+			</Figure.Caption>
+			<ProgressBar striped variant='info' now={timePercent} key={2} />
+		</Figure>
 	)
 }
 
