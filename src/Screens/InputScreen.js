@@ -2,8 +2,9 @@ import React, {useState, useEffect} from 'react'
 import {Form, Button} from 'react-bootstrap'
 import Message from '../components/Message'
 import {flatHourlyRate, timeOfUseRate} from '../Data/calculations'
+import Result from '../components/Result'
 
-const InputScreen = () => {
+const InputScreen = ({history}) => {
 	//All neccesary UI states from user inputs
 	const [typeRate, setTypeRate] = useState('flat')
 	const [milesPerYear, setMilesPerYear] = useState(5000)
@@ -49,28 +50,40 @@ const InputScreen = () => {
 			//Push to results page
 			if (flatDiff < touDiff) {
 				if (typeRate === 'flat') {
-					result.output = `You should keep the flat rate. You will be paying an  extra (Flat Rate) $${flatDiff} vs (Time Rate) $${touDiff} a year. Total savings by keeping the Flat rate over the time rate is ${
+					result.choice = 'flat'
+					result.text = `You should keep the flat rate. You will be paying an  extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by keeping the Flat rate over the time rate is ${
 						touDiff - flatDiff
 					} `
-					if (typeRate === 'time') {
-						result.output = `You should switch to a flat rate. You will be paying an extra (Flat Rate) $${flatDiff} vs (Time Rate) $${touDiff} a year. Total savings by switching to the flat rate over the time rate is ${
-							touDiff - flatDiff
-						}`
-					}
-					if (touDiff < flatDiff) {
-						if (typeRate === 'flat') {
-							result.output = `You should switch to the Time rate. You will be paying an extra (Flat Rate) $${flatDiff} vs (Time Rate) $${touDiff} a year. Total savings switching to the time rate over the flat rate is ${
-								flatDiff - touDiff
-							} `
-							if (typeRate === 'time') {
-								result.output = `You should keep the time rate. You will be paying an extra (Flat Rate) $${flatDiff} vs (Time Rate) $${touDiff} a year. Total savings by keeping the time rate over the flat rate is ${
-									flatDiff - touDiff
-								} `
-							}
-						}
-					}
+				}
+				if (typeRate === 'time') {
+					result.choice = 'time'
+					result.text = `You should switch to a flat rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by switching to the flat rate over the time rate is ${
+						touDiff - flatDiff
+					}`
 				}
 			}
+			if (touDiff < flatDiff) {
+				if (typeRate === 'flat') {
+					result.choice = 'flat'
+					result.text = `You should switch to the Time rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings switching to the time rate over the flat rate is ${
+						flatDiff - touDiff
+					} `
+				}
+				if (typeRate === 'time') {
+					result.choice = 'time'
+					result.text = `You should keep the time rate. You will be paying an extra $${flatDiff} (Flat Rate) vs $${touDiff} (Time Rate) a year. Total savings by keeping the time rate over the flat rate is ${
+						flatDiff - touDiff
+					} `
+				}
+			}
+			if (touDiff === flatDiff) {
+				result.text = ` Both rates work the same! You will be paying ${flatDiff} a year for either Rate. `
+				typeRate === 'time'
+					? (result.choice = 'time')
+					: (result.choice = 'flat')
+			}
+			setResultObject(result)
+			console.log(resultObject)
 		}
 	}
 	const formValidation = () => {
@@ -158,12 +171,19 @@ const InputScreen = () => {
 			alert('Please upload a valid CSV file.')
 		}
 	}
-
+	const labelStyle = {
+		color: 'black',
+	}
 	return (
 		<div>
+			{resultObject.choice ? (
+				<Result text={resultObject.text} choice={resultObject.choice} />
+			) : null}
 			<Form className='py-4' onSubmit={onSubmit}>
 				<Form.Group controlId='typeOfRate'>
-					<Form.Label>Which rate are you currently on?</Form.Label>
+					<Form.Label style={labelStyle}>
+						Which rate are you currently on?
+					</Form.Label>
 					<Form.Control
 						as='select'
 						value={typeRate}
@@ -177,7 +197,7 @@ const InputScreen = () => {
 					</Form.Control>
 				</Form.Group>
 				<Form.Group controlId='mileage'>
-					<Form.Label>
+					<Form.Label style={labelStyle}>
 						About how many miles will you drive per year? (1,000
 						Miles-200,000 Miles)
 					</Form.Label>
@@ -200,7 +220,7 @@ const InputScreen = () => {
 				})}
 
 				<Form.Group controlId='timeSelect'>
-					<Form.Label>
+					<Form.Label style={labelStyle}>
 						What time do you plan on charging your Electric Vehicle?
 					</Form.Label>
 					<Form.Control
@@ -216,6 +236,7 @@ const InputScreen = () => {
 				</Form.Group>
 				<Form.Group>
 					<Form.File
+						style={labelStyle}
 						label='Please Upload CSV file with data'
 						accept='.csv'
 						id='fileUpload'

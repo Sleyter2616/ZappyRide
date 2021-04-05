@@ -1,5 +1,29 @@
+html {
+	background: #004ff9; /* fallback for old browsers */
+	background: -webkit-linear-gradient(
+		to right,
+		#fff94c,
+		#004ff9
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to right,
+		#fff94c,
+		#004ff9
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
 main {
 	min-height: 80vh;
+	background: #004ff9; /* fallback for old browsers */
+	background: -webkit-linear-gradient(
+		to right,
+		#fff94c,
+		#004ff9
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to right,
+		#fff94c,
+		#004ff9
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 h1 {
 	font-size: 1.8rem;
@@ -11,4 +35,21 @@ h2 {
 }
 h3 {
 	padding: 1rem 0;
+}
+footer {
+	background: #004ff9; /* fallback for old browsers */
+	background: -webkit-linear-gradient(
+		to right,
+		#fff94c,
+		#004ff9
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to right,
+		#fff94c,
+		#004ff9
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+option {
+	color: #004ff9;
 }
